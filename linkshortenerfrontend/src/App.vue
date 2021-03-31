@@ -47,8 +47,9 @@ body {
   font-weight: normal;
   width: 458px;
   height: 57px;
- left: 408px;
- border-style: none;
+  left: 408px;
+  padding-left: 1%;
+  border-style: none;
 }
 .input:disabled {
   background: #89B0AE;
@@ -59,6 +60,14 @@ body {
   left: 408px;
 }
 
+input:read-only {
+  background: #89B0AE;
+  font-family: inherit;
+  font-weight: normal;
+}
+input:focus {
+  outline: none;
+}
 .btn {
   display: inline-block;
   background: #555B6E;
@@ -78,7 +87,7 @@ body {
   outline: none;
 }
 .logo {
-  position: absolute;
+position: absolute;
 left: 23px;
 top: 600px;
 }
