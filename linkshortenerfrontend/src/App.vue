@@ -59,7 +59,6 @@ body {
   height: 57px;
   left: 408px;
 }
-
 input:read-only {
   background: #89B0AE;
   font-family: inherit;
