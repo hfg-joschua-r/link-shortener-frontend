@@ -1,19 +1,22 @@
 <template>
-<div if="notifications">
-  <transition name="notification">
+<div id="notifications">
+  <transition name="fade">
         <notification v-if="showCopySucess" message="Link wurde erfolgreich in die Zwischenablage kopiert!" type="sucess"/>
   </transition>
-  </div>
+</div>
+ <h3> {{ info }} </h3>
   <h1 class="header">{{ title }}</h1>
   <input class="input" type="text" v-model="inputUrl" v-bind:placeholder="placeholder"/>
   <button @click="ouputUrl(inputUrl)" class="btn">Kürzen!</button><br/>
   <input @click="copyFromOutputField" type="text" class="input" v-model="generatedUrl" v-bind:readonly="outputFieldDisabled" id="outputInputField">
+  <i class="el-icon-copy-document" id="copyIcon" v-bind:disabled="outputFieldDisabled"></i>
   <button v-on:click="outputFieldDisabled = !outputFieldDisabled" class="btn" style="width:57px; margin-right: 95px"
-  v-bind:style= "[outputFieldDisabled ?  'background: #555B6E;':'background: #FAF9F9; border: 2px solid #555B6E; color: #555B6E;']">edit</button><br/>
+  v-bind:style= "[outputFieldDisabled ?  'background: #555B6E;':'background: #FAF9F9; border: 2px solid #555B6E; color: #555B6E;']"><i class="el-icon-edit"></i></button><br/>
   <br>
 </template>
 
 <script>
+import axios from 'axios'
 import notification from './notification.vue'
 export default {
   name: 'UrlShortener',
@@ -29,6 +32,7 @@ export default {
       generatedUrl: "",
       outputFieldDisabled: true,
       showCopySucess: false,
+      info: "",
     }
   },
   methods: {
@@ -40,24 +44,40 @@ export default {
     },
     copyFromOutputField(){
       var outputField = document.getElementById("outputInputField");
-      if(this.outputFieldDisabled){
+      if(this.outputFieldDisabled && outputField.value != ""){
       outputField.select();
       document.execCommand('copy');
       this.showCopySucess = true;
-      
+
       setTimeout(() => {
         this.showCopySucess = false;
-      }, 3000)
+        this.getData();
+      }, 4000)
       }
-    }
+    },
+    getData(){
+      axios
+      .get('https://cat-fact.herokuapp.com/facts') 
+      .then(response=> (this.info = response.data[3].text))
+      .catch(error => (console.log(error)))
+    },
   },
 }
 </script>
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
+}
+#copyIcon {
+  position: absolute;
+  color: #BEE3DB;
+  margin-top: 1%;
+  left: 56%;
+  font-size: 28px;
 }
 </style>

@@ -28,7 +28,7 @@ span {
     display: block;
     margin: 10px 30px 10px 30px;
     padding: 2%;
-    color: #555B6E;
+    color: #ffffff;
 }
  .sucessNoti {
      background-color: lightgreen;

@@ -9,13 +9,12 @@ import urlShortener from './components/UrlShortener.vue'
 export default {
   name: 'App',
   components: {
-    urlShortener,
+    urlShortener
   }
 }
 </script>
 
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 body {
   background-color: #FAF9F9;
@@ -87,7 +86,7 @@ input:focus {
 }
 .logo {
 position: absolute;
-left: 23px;
-top: 600px;
+left: 30px;
+top: 800px;
 }
 </style>
