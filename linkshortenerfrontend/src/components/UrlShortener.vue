@@ -7,7 +7,7 @@
  <h3> {{ info }} </h3>
   <h1 class="header">{{ title }}</h1>
   <input class="input" type="text" v-model="inputUrl" v-bind:placeholder="placeholder"/>
-  <button @click="ouputUrl(inputUrl)" class="btn">Kürzen!</button><br/>
+  <button @click="getGeneratedAbbrevation(inputUrl)" class="btn">Kürzen!</button><br/>
   <input @click="copyFromOutputField" type="text" class="input" v-model="generatedUrl" v-bind:readonly="outputFieldDisabled" id="outputInputField">
   <i class="el-icon-copy-document" id="copyIcon" v-bind:disabled="outputFieldDisabled"></i>
   <button v-on:click="outputFieldDisabled = !outputFieldDisabled" class="btn" style="width:57px; margin-right: 95px"
@@ -33,6 +33,7 @@ export default {
       outputFieldDisabled: true,
       showCopySucess: false,
       info: "",
+      inputUrl: "",
     }
   },
   methods: {
@@ -51,16 +52,16 @@ export default {
 
       setTimeout(() => {
         this.showCopySucess = false;
-        this.getData();
       }, 4000)
       }
     },
-    getData(){
+    async getGeneratedAbbrevation(){
+      let url = { url: this.inputUrl};
       axios
-      .get('https://cat-fact.herokuapp.com/facts') 
-      .then(response=> (this.info = response.data[3].text))
+      .post('http://localhost:3000/code/generate', url)
+      .then(response => (this.generatedUrl = "http://localhost:3000/code/" + response.data.url))
       .catch(error => (console.log(error)))
-    },
+    }
   },
 }
 </script>
