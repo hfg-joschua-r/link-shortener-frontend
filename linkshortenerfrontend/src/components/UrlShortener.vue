@@ -3,6 +3,9 @@
   <transition name="fade">
         <notification v-if="showCopySucess" message="Link wurde erfolgreich in die Zwischenablage kopiert!" type="sucess"/>
   </transition>
+  <transition name="fade">
+        <notification v-if="showFailure" message= "Die angegebene URL ist nicht gültig! :(" type="failure"/>
+  </transition>
 </div>
  <h3> {{ info }} </h3>
   <h1 class="header">{{ title }}</h1>
@@ -32,6 +35,7 @@ export default {
       generatedUrl: "",
       outputFieldDisabled: true,
       showCopySucess: false,
+      showFailure: false,
       info: "",
       inputUrl: "",
     }
@@ -56,11 +60,21 @@ export default {
       }
     },
     async getGeneratedAbbrevation(){
+      if(!this.inputUrl.includes("https://"))
+        this.inputUrl = "https://" + this.inputUrl;
+      
       let url = { url: this.inputUrl};
       axios
       .post('http://localhost:3000/code/generate', url)
-      .then(response => (this.generatedUrl = "http://localhost:3000/code/" + response.data.url))
-      .catch(error => (console.log(error)))
+      .then(response => {
+        if(response.status == 200)
+          this.generatedUrl = "http://localhost:3000/code/" + response.data.url
+      })
+      .catch(error => {
+      console.log(error);
+          this.showFailure = true;
+          setTimeout(() => {this.showFailure = false;}, 3000)
+      })
     }
   },
 }

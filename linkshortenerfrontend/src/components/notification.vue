@@ -2,6 +2,9 @@
     <div v-if="type === 'sucess'">
         <span class="sucessNoti"> {{ message }} </span>
     </div>
+    <div v-if="type === 'failure'">
+        <span class="failureNoti"> {{ message }} </span>
+    </div>  
 </template>
 
 <script>
@@ -32,5 +35,8 @@ span {
 }
  .sucessNoti {
      background-color: lightgreen;
+ }
+ .failureNoti {
+     background-color: lightcoral;
  }
 </style>
