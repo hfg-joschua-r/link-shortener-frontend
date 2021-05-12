@@ -5,7 +5,6 @@
 
 <script>
 import urlShortener from './components/UrlShortener.vue'
-
 export default {
   name: 'App',
   components: {
