@@ -1,14 +1,11 @@
 <template>
-  <urlShortener title="Kürze deine URL." placeholder="deineUrl.com"/>
-  <a href="https://www.hfg-gmuend.de/"><img src="./assets/Gmuend_logo.svg" class="logo"/></a>
+ <router-view/>
 </template>
 
 <script>
-import urlShortener from './components/UrlShortener.vue'
 export default {
   name: 'App',
   components: {
-    urlShortener
   }
 }
 </script>

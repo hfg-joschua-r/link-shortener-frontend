@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+//import Home from '../views/Home.vue'
 import UrlShortener from '../components/UrlShortener.vue'
+import resolveLink from '../views/router.vue'
+import NotFound from '../views/notFound.vue'
 
 const routes = [{
         path: '/',
-        name: 'Home',
-        component: Home
+        name: 'UrlShortener',
+        component: UrlShortener
     },
     {
         path: '/about',
@@ -17,15 +19,19 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
-        path: '/link-shortening',
-        name: 'UrlShortener',
-        component: UrlShortener
+        path: '/resolveLink/:id',
+        name: 'resolveLink',
+        component: resolveLink
+    },
+    {
+        path: "/:catchAll(.*)",
+        component: NotFound,
     }
-]
+];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
-})
+});
 
-export default router
+export default router;
