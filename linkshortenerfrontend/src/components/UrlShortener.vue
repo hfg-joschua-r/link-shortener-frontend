@@ -38,12 +38,6 @@ export default {
     }
   },
   methods: {
-    ouputUrl(url){
-      //backend Call
-      url ="https://" + url + ".com";
-      console.log(url);
-      this.generatedUrl = url;
-    },
     copyFromOutputField(){
       var outputField = document.getElementById("outputInputField");
       if(this.outputFieldDisabled && outputField.value != ""){
