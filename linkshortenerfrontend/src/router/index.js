@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import UrlShortener from '../components/UrlShortener.vue'
 import resolveLink from '../views/router.vue'
 import NotFound from '../views/notFound.vue'
+import adminLink from '../views/adminLink.vue'
 
 const routes = [{
         path: '/',
@@ -24,6 +25,10 @@ const routes = [{
         component: resolveLink
     },
     {
+        path: '/admin/:code',
+        name: 'adminLink',
+        component: adminLink
+    } {
         path: "/:catchAll(.*)",
         component: NotFound,
     }
