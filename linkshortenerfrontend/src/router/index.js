@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 //import Home from '../views/Home.vue'
-import UrlShortener from '../components/UrlShortener.vue'
-import resolveLink from '../views/router.vue'
-import NotFound from '../views/notFound.vue'
-import adminLink from '../views/adminLink.vue'
+import UrlShortener from '../components/UrlShortener.vue';
+import resolveLink from '../views/router.vue';
+import NotFound from '../views/notFound.vue';
+import adminLink from '../views/adminLink.vue';
 
 const routes = [{
         path: '/',
@@ -28,7 +28,8 @@ const routes = [{
         path: '/admin/:code',
         name: 'adminLink',
         component: adminLink
-    } {
+    },
+    {
         path: "/:catchAll(.*)",
         component: NotFound,
     }

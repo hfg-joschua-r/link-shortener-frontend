@@ -16,6 +16,7 @@
   <button v-on:click="outputFieldDisabled = !outputFieldDisabled" class="btn" style="width:57px; margin-right: 95px"
   v-bind:style= "[outputFieldDisabled ?  'background: #555B6E;':'background: #FAF9F9; border: 2px solid #555B6E; color: #555B6E;']"><i class="el-icon-edit"></i></button><br/>
   <br>
+  <p>{{ AdminLink }}</p>
   <a href="https://www.hfg-gmuend.de/"><img src="../assets/Gmuend_logo.svg" class="logo"/></a>
 </template>
 
@@ -35,6 +36,7 @@ export default {
       showFailure: false,
       info: "",
       inputUrl: "",
+      AdminLink: "",
     }
   },
   methods: {
@@ -54,18 +56,23 @@ export default {
       if(!this.inputUrl.includes("https://"))
         this.inputUrl = "https://" + this.inputUrl;
       
-      let url = { url: this.inputUrl};
+      this.AdminLink = this.generateAdminLink(); 
+      let payload = { url: this.inputUrl, adminLink: this.AdminLink};
       axios
-      .post('http://localhost:3000/code/generate', url)
+      .post('http://localhost:3000/code/generate', payload)
       .then(response => {
         if(response.status == 200)
-          this.generatedUrl = "http://localhost:8080/resolveLink/" + response.data.url
+          this.generatedUrl = "http://localhost:8080/resolveLink/" + response.data.url;
+          this.AdminLink = "Dein Verwaltungs-Admin Link ist: http://localhost:8080/admin/" + this.AdminLink;
       })
       .catch(error => {
       console.log(error);
           this.showFailure = true;
           setTimeout(() => {this.showFailure = false;}, 3000)
       })
+    },
+    generateAdminLink(){
+       return Math.random().toString(36).substring(2, 15);
     }
   },
 }
