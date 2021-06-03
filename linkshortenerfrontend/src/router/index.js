@@ -4,6 +4,7 @@ import UrlShortener from '../components/UrlShortener.vue';
 import resolveLink from '../views/router.vue';
 import NotFound from '../views/notFound.vue';
 import adminLink from '../views/adminLink.vue';
+import adminDashboard from '../views/adminDashboard';
 
 const routes = [{
         path: '/',
@@ -28,6 +29,11 @@ const routes = [{
         path: '/admin/:code',
         name: 'adminLink',
         component: adminLink
+    },
+    {
+        path: '/adminDashboard',
+        name: 'adminDashboard',
+        component: adminDashboard
     },
     {
         path: "/:catchAll(.*)",
