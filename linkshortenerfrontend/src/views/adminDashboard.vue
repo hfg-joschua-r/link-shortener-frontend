@@ -1,5 +1,7 @@
 <template>
-<router-link to="/">Zurück zum Link-Shortener.</router-link>
+  <router-link to="/" style="display: block; text-align: left"
+    >Zurück zum Link-Shortener.</router-link
+  >
   <div id="notifications">
     <transition name="fade">
       <notification
@@ -16,13 +18,27 @@
       />
     </transition>
   </div>
-  <h1>Admin Dashboard</h1>
+  <h1 style="display: block; text-align: center">Admin Dashboard</h1>
   <ul>
-      <li v-for="link in linkCollection" v-bind:key="link.originalURL">
-          {{ link.originalURL }}
+    <div>
+      <li
+        v-for="link in linkCollection"
+        v-bind:key="link.originalURL"
+        class="itemContainer"
+      >
+        <h3 class="headerLink">{{ link.originalURL }}</h3>
+        <h3 class="headerLink">{{ link.shortCode }}</h3>
+        <h3 class="subHeader">
+          Anzahl Verwendungen:
+          <span class="highlightedNumber">{{ link.clickCounter }}</span>
+        </h3>
+        <h3 class="subHeader">Erstellt am: {{ convert(link.dateCreated) }}</h3>
+        <button class="btnUpdate" @click=deleteEntryByID(link.adminCode)>löschen</button>
+        <h3 class="subHeader">Admin-Code: {{ link.adminCode }}</h3>
       </li>
+    </div>
   </ul>
-  
+  <img src="../assets/fileIllu.svg" class="illustration">
   <a href="https://www.hfg-gmuend.de/"
     ><img src="../assets/Gmuend_logo.svg" class="logo"
   /></a>
@@ -52,43 +68,50 @@ export default {
           console.log(res.status);
           if (res.status === 200) {
             this.linkCollection = res.data;
-            console.log(this.linkCollection)
+            console.log(this.linkCollection);
           }
         })
-        .catch(err => {
-            console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     },
-    async updateLink() {
-      if (this.updatedURL !== "") {
-        let payload = {
-          adminLink: this.$route.params.code,
-          newURL: this.updatedURL,
-        };
-        await axios
-          .post("http://localhost:3000/code/updateExisting", payload)
-          .then((response) => {
-            console.log(response);
-            if (response.status == 200) {
-              console.log("sucess");
-              this.showUpdateSucess = true;
-              setTimeout(() => {
-                this.showUpdateSucess = false;
-              }, 3000);
-            } else this.showFailure = true;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.showFailure = true;
-            setTimeout(() => {
-              this.showFailure = false;
-            }, 3000);
-          });
-      }
+    convert(time) {
+      // Months array
+      var months_arr = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      // Convert timestamp to milliseconds
+      var date = new Date(time);
+      // Year
+      var year = date.getFullYear();
+      // Month
+      var month = months_arr[date.getMonth()];
+      // Day
+      var day = date.getDate();
+      // Hours
+      var hours = date.getHours();
+      // Minutes
+      var minutes = "0" + date.getMinutes();
+      // Seconds
+      var seconds = "0" + date.getSeconds();
+      // Display date time in MM-dd-yyyy h:m:s format
+      var convdataTime = day + "." + month +"." + year +", " +hours + ":" + minutes.substr(-2) +":" + seconds.substr(-2);
+      return convdataTime;
     },
-    async deleteLink(adminCode) {
+    async deleteEntryByID(id) {
       let payload = {
-        adminLink: adminCode,
+        adminLink: id,
       };
       await axios
         .post("http://localhost:3000/code/deleteExisting", payload)
@@ -97,8 +120,8 @@ export default {
           if (response.status == 200) {
             console.log("sucess");
             this.showUpdateSucess = true;
+            this.getEveryLinkInDB();
             setTimeout(() => {
-              window.location.href="http://localhost:8080";
               this.showUpdateSucess = false;
             }, 3000);
           }
@@ -120,7 +143,7 @@ body {
   text-align: left;
 }
 li {
-    text-align: left;
+  text-align: left;
 }
 .input {
   display: inline-block;
@@ -165,8 +188,9 @@ input:focus {
   outline: none;
 }
 .btnUpdate {
-  position: relative;
-  display: inline-block;
+  float: right;
+  margin-left: -50%;
+  margin-top: 2em;
   background: #2c3e50;
   color: #ffffff;
   border: none;
@@ -180,13 +204,9 @@ input:focus {
   font-weight: 500;
   margin-left: 1%;
 }
-.btnContainer {
-  float: left;
-  margin-left: 4%;
-}
 .logo {
-  position: absolute;
-  left: 30px;
+  position: fixed;
+  left: 1540px;
   top: 800px;
 }
 .highlight {
@@ -224,5 +244,37 @@ h1 {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.itemContainer {
+  background: #bee3db;
+  overflow: hidden;
+}
+li {
+  list-style-type: none;
+  margin: 1%;
+  margin-right: 30%;
+  padding: 1%;
+}
+.headerLink {
+  font-size: 24px;
+}
+.highlightedNumber {
+  font-weight: 700;
+  font-size: 24px;
+}
+.subHeader {
+  font-size: 18px;
+  display: block;
+  width: 50%;
+}
+.subHeader2 {
+  font-size: 18px;
+  display: inline-block;
+  width: 60%;
+}
+.illustration {
+  position: fixed;
+  left: 1300px;
+  top: 100px;
 }
 </style>

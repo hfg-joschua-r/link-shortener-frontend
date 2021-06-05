@@ -4,6 +4,7 @@
         <h1>Du wirst weitergeleitet zu: <a v-bind:href="originalLink">{{ originalLink }}</a></h1>
         <h3>Dieser Link wurde bereits {{ clickCounter }} mal benutzt!</h3>
     </div>
+    <img src="../assets/nightsky.svg" class="illustration">
     <a href="https://www.hfg-gmuend.de/"><img src="../assets/Gmuend_logo.svg" class="logo"/></a>
 </template>
 <script>
@@ -38,5 +39,10 @@ export default {
 position: absolute;
 left: 30px;
 top: 800px;
+}
+.illustration {
+position: fixed;
+  left: 1300px;
+  top: 550px;
 }
 </style>

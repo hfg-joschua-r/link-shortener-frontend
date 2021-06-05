@@ -17,6 +17,7 @@
   v-bind:style= "[outputFieldDisabled ?  'background: #555B6E;':'background: #FAF9F9; border: 2px solid #555B6E; color: #555B6E;']"><i class="el-icon-edit"></i></button><br/>
   <br>
   <p>{{ AdminLink }}</p>
+  <img src="../assets/plantIllu.svg" class="illustration" >
   <a href="https://www.hfg-gmuend.de/"><img src="../assets/Gmuend_logo.svg" class="logo"/></a>
 </template>
 
@@ -166,5 +167,11 @@ input:focus {
 position: absolute;
 left: 30px;
 top: 800px;
+}
+.illustration {
+  position: fixed;
+  left: 1400px;
+  top: 550px;
+  width: 30%;
 }
 </style>
