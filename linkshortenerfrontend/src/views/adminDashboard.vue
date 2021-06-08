@@ -35,6 +35,7 @@
         <h3 class="subHeader">Erstellt am: {{ convert(link.dateCreated) }}</h3>
         <button class="btnUpdate" @click=deleteEntryByID(link.adminCode)>löschen</button>
         <h3 class="subHeader">Admin-Code: {{ link.adminCode }}</h3>
+        <h3 class="subHeader">Client IP Adress: {{ link.clientIpAdress }}</h3>
       </li>
     </div>
   </ul>

@@ -21,7 +21,7 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
-        path: '/resolveLink/:id',
+        path: '/link/:id',
         name: 'resolveLink',
         component: resolveLink
     },

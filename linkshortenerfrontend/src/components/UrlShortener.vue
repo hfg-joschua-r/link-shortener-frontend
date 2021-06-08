@@ -38,6 +38,7 @@ export default {
       info: "",
       inputUrl: "",
       AdminLink: "",
+      clientIpAddress: "",
     }
   },
   methods: {
@@ -58,12 +59,14 @@ export default {
         this.inputUrl = "https://" + this.inputUrl;
       
       this.AdminLink = this.generateAdminLink(); 
-      let payload = { url: this.inputUrl, adminLink: this.AdminLink};
+      this.clientIpAddress = await this.getClientIpAdress();
+      console.log(this.clientIpAddress);
+      let payload = { url: this.inputUrl, adminLink: this.AdminLink, ipAddress: this.clientIpAddress };
       axios
       .post('http://localhost:3000/code/generate', payload)
       .then(response => {
         if(response.status == 200)
-          this.generatedUrl = "http://localhost:8080/resolveLink/" + response.data.url;
+          this.generatedUrl = "http://localhost:8080/link/" + response.data.url;
           this.AdminLink = "Dein Verwaltungs-Admin Link ist: http://localhost:8080/admin/" + this.AdminLink;
       })
       .catch(error => {
@@ -74,6 +77,17 @@ export default {
     },
     generateAdminLink(){
        return Math.random().toString(36).substring(2, 15);
+    },
+    async getClientIpAdress(){
+      return axios.get('https://api.ipify.org?format=json')
+      .then(response => {
+        this.clientIpAddress = response.data.ip;
+        return response.data.ip;
+      })
+      .catch(error => {
+        console.log(error);
+        return "0.0.0.0"
+      })
     }
   },
 }
