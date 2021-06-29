@@ -98,6 +98,7 @@ export default {
             if (response.status == 200) {
               console.log("sucess");
               this.showUpdateSucess = true;
+              this.editLink = false;
               setTimeout(() => {
                 this.showUpdateSucess = false;
               }, 3000);
