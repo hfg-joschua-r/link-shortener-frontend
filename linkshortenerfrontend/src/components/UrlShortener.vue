@@ -23,14 +23,14 @@
     v-model="inputUrl"
     placeholder="https://hfg-gmuend.de"
   />
-  <button @click="getGeneratedAbbrevation(inputUrl)" class="btn">Kürzen!</button
+  <button @click="getGeneratedAbbrevation(inputUrl)" class="btn" v-bind:disabled="!outputFieldDisabled">Kürzen!</button
   ><br />
   <input
     @click="copyFromOutputField"
     type="text"
     class="input"
     v-model="generatedUrl"
-    v-bind:readonly="outputFieldDisabled"
+    readonly
     id="outputInputField"
   />
   <i
@@ -39,7 +39,7 @@
     v-bind:disabled="outputFieldDisabled"
   ></i>
   <button
-    v-on:click="outputFieldDisabled = !outputFieldDisabled"
+    v-on:click="switchToEdit"
     class="btn"
     style="width: 57px; margin-right: 95px"
     id="editBtn"
@@ -49,14 +49,14 @@
         : 'background: #FAF9F9; border: 2px solid #555B6E; color: #555B6E;',
     ]"
   >
-    <i class="el-icon-edit" -vbind:disabled="outputFieldDisabled"></i></button
+    <i class="el-icon-edit" vbind:disabled="outputFieldDisabled"></i></button
   ><br />
   <br />
   <p>{{ AdminLink }}</p>
-
   <el-row :gutter="20">
   <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-  <el-col :span="8"><div class="grid-content bg-purple">
+  <el-col :span="8"><div class="grid-content bg-purple" v-if="!outputFieldDisabled">
+    <p>Wähle beliebig viele Emojis!</p>
     <discord-picker
     input
     :value="value"
@@ -64,8 +64,9 @@
     gif-format="md"
     @update:value="value = $event"
     @emoji="setEmoji"
-    @gif="setGif"
   />
+  <button @click="postManualAbbrevation()" class="btn" style="margin-top:8px">Erstellen!</button
+  >
   </div></el-col>
   <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
   </el-row>
@@ -100,24 +101,57 @@ export default {
       value: ''
     };
   },
-  mounted() {
-    /*axios.get("http://localhost:3000/fgEmojiPicker.js").then((result) => {
-      console.log(result);
-      new result.data.FgEmojiPicker({
-        trigger: ["#editBtn"],
-        position: ["bottom", "right"],
-        emit(obj, triggerElement) {
-          const emoji = obj.emoji;
-          console.log(triggerElement);
-          document.querySelector("outputInputField").value += emoji;
-        },
-      });
-    }); */
-  },
   methods: {
     /*onInput(event) {
       console.log(event.data);
     }, */
+    setEmoji (emoji) {
+      console.log(emoji)
+      if(this.generatedUrl === ""){
+        this.generatedUrl = "http://localhost:8080/link/" + emoji;
+      }
+      else {
+        this.generatedUrl = this.generatedUrl + emoji;
+      }
+    },
+    switchToEdit() {
+      this.outputFieldDisabled = !this.outputFieldDisabled;
+      if(this.outputFieldDisabled)
+        this.generatedUrl = ""
+    },
+    async postManualAbbrevation(){
+      let iUrl = this.inputUrl;
+      if (!this.inputUrl.includes("https://"))
+       iUrl = "https://" + iUrl;
+
+      this.AdminLink = this.generateAdminLink();
+      this.clientIpAddress = await this.getClientIpAdress();
+      console.log(this.clientIpAddress);
+      let payload = {
+        url: iUrl,
+        adminLink: this.AdminLink,
+        ipAddress: this.clientIpAddress,
+        abbrevation: this.generatedUrl,
+      };
+      axios
+        .post("http://localhost:3000/code/generateManual", payload)
+        .then((response) => {
+          if (response.status == 200)
+            this.generatedUrl =
+              "http://localhost:8080/link/" + response.data.url;
+          this.AdminLink =
+            "Dein Verwaltungs-Admin Link ist: http://localhost:8080/admin/" +
+            this.AdminLink;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.showFailure = true;
+          setTimeout(() => {
+            this.showFailure = false;
+          }, 3000);
+        });
+    },
+
     copyFromOutputField() {
       var outputField = document.getElementById("outputInputField");
       if (this.outputFieldDisabled && outputField.value != "") {
@@ -131,21 +165,22 @@ export default {
       }
     },
     async getGeneratedAbbrevation() {
+      let iUrl = this.inputUrl;
       if (!this.inputUrl.includes("https://"))
-        this.inputUrl = "https://" + this.inputUrl;
-
-      this.AdminLink = this.generateAdminLink();
+       iUrl = "https://" + iUrl;
+      let aLink = this.generateAdminLink();
       this.clientIpAddress = await this.getClientIpAdress();
       console.log(this.clientIpAddress);
       let payload = {
-        url: this.inputUrl,
-        adminLink: this.AdminLink,
+        url: iUrl,
+        adminLink: aLink,
         ipAddress: this.clientIpAddress,
       };
       axios
         .post("http://localhost:3000/code/generate", payload)
         .then((response) => {
           if (response.status == 200)
+         this.AdminLink = aLink
             this.generatedUrl =
               "http://localhost:8080/link/" + response.data.url;
           this.AdminLink =
@@ -190,8 +225,8 @@ export default {
 #copyIcon {
   position: absolute;
   color: #bee3db;
-  margin-top: 1%;
-  left: 56%;
+  margin-top: .8%;
+  left: 55.5%;
   font-size: 28px;
 }
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
@@ -262,6 +297,9 @@ input:focus {
 }
 .btn:focus {
   outline: none;
+}
+.btn:disabled {
+  background: #b7bdd1;
 }
 .logo {
   position: absolute;
