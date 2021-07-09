@@ -68,3 +68,7 @@
 - **mounted() / getEveryLinkInDB()**: Holt über den API-Endpoint */adminDashboard/getAllEntries* alle Einträge aus der Datenbank und schreibt diese in das linkCollection Array
 - **deleteEntryByID(id)**: Nimmt den Admin Code des Eintrags entgegen um eine Backend Anfrage zu senden um diesen Eintrag zu löschen
 - **convert(time)**: Nimmt einen UNIX-Timecode entgegen und konvertiert diesen in einen für Menschen lesbares Datum & Uhrzeit.
+
+
+## Backend 
+[Backend Repo](https://github.com/hfg-joschua-r/link-shortener-backend/tree/Abgabe)
